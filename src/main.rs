@@ -1,3 +1,5 @@
+use std::{option, path::PathBuf};
+
 use colored::Colorize;
 use walkdir::WalkDir;
 use clap::Parser;
@@ -5,6 +7,10 @@ use clap::Parser;
 #[derive(Parser)]
 #[command(version = "1.0", author = "hr.zhou@mail.utoronto.ca", disable_help_flag = true)]
 struct Config {
+    // path: Option<PathBuf>,
+    // first value is the string to be searched
+    paths: Vec<PathBuf>,
+
     /// Case-insensitive search
     #[arg(short='i')]
     i: bool,
@@ -33,7 +39,7 @@ struct Config {
     h: bool
 }
 
-fn custom_help() {
+fn help_msg() {
     println!(
         "Usage: grep [OPTIONS] <pattern> <files...>\n\
         Options:\n\
@@ -49,10 +55,17 @@ fn custom_help() {
 
 fn main() {
     let config = Config::parse();
-
-    if config.h {
-        custom_help();
+    if config.h || config.paths.is_empty() {
+        help_msg();
         return;
     }
 
+    for path in config.paths {
+        if path.exists() {
+            println!("Using file: {:?}", path);
+        }
+        else {
+            eprintln!("File does not exist: {:?}", path);
+        }
+    }
 }
