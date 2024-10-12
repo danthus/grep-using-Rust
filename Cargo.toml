@@ -7,3 +7,4 @@ edition = "2021"
 walkdir = "2"
 colored = "2.1.0"
 clap = { version = "4.0", features = ["derive"] }
+regex = "1.11.0"
