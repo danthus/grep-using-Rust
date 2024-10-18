@@ -1,4 +1,4 @@
-use std::{path::PathBuf, fs};
+use std::{fs, path::PathBuf};
 
 use colored::Colorize;
 use walkdir::WalkDir;
@@ -9,6 +9,7 @@ use regex::Regex;
 #[command(version = "1.0", author = "hr.zhou@mail.utoronto.ca", disable_help_flag = true)]
 struct Config {
     // target word
+    #[arg(default_value("<NaN>"))]
     target: String,
 
     // file path or paths
@@ -188,11 +189,10 @@ impl Config {
 
 fn main() {
     let config = Config::parse();
-    if config.h || config.paths.is_empty() {
+    if config.h || config.paths.is_empty() || config.target=="<NaN>" {
         help_msg();
         return;
     }
 
     config.run();
-    // print empty lines when using -v??
 }
